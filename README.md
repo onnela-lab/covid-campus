@@ -1,5 +1,7 @@
 # covid-campus
 
+Study of the effectiveness of SARS-CoV-2 repeat testing, social distancing, and mask wearing among a residential college population using the Copenhagen Networks Study data.
+
 ## File Overview
 
 * [**testing_freq.py**](https://github.com/onnela-lab/covid-campus/blob/main/testing_freq.py): main class and methods for running simulations examining testing frequency
