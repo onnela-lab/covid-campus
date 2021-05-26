@@ -174,7 +174,7 @@ def gen_trans_prob(n_nodes, univ_val = None, a = 1, b = 5, seed = None):
 
     return beta
 
-def gen_trans_prob_NPI(n_nodes, base_beta, p_sd = None, p_fm = None, sd_nodes = None, fm_nodes = None, fm_eff = 0.15, sd_eff = 0.18, seed = None):
+def gen_trans_prob_NPI(n_nodes, base_beta, p_sd = None, p_fm = None, sd_nodes = None, fm_nodes = None, fm_eff = 0.15, fm_eff_std = 0.0684, sd_eff = 0.18, sd_eff_std = 0.0734, seed = None):
     """
     Assigns transmission probability matrix for each possible node pairing
     based on assumed reduction due to mask-wearing and/or social distancing;
@@ -202,11 +202,13 @@ def gen_trans_prob_NPI(n_nodes, base_beta, p_sd = None, p_fm = None, sd_nodes = 
         Keys are node IDs, values are True/False for mask wearing;
         if left None, user must specify p_fm
     fm_eff: float
-        Efficacy of face masks; multiplicatively reduces transmission parameter
-        if a single face mask is worn
+        Point estimate for efficacy of face masks
+    fm_eff_std: float
+        Standard deviation for efficacy of face masks
     sd_eff: float
-        Efficacy of social distancing; multiplicatively reduces transmission
-        parameter if social distancing is practiced
+        Point estimate for efficacy of social distancing
+    st_eff_std: float
+        Standard deviation for efficacy of face masks
     seed: integer
         Initializes random processes
     -------
@@ -246,37 +248,46 @@ def gen_trans_prob_NPI(n_nodes, base_beta, p_sd = None, p_fm = None, sd_nodes = 
     fm2sd = [(x,y) for (x,y) in fm2 if (x in sd) or (y in sd)]
     fm2sd_xx = [x for (x,y) in fm2sd]
     fm2sd_yy = [y for (x,y) in fm2sd]
-    beta[fm2sd_xx, fm2sd_yy] = fm_eff*fm_eff*sd_eff*base_beta
-    beta[fm2sd_yy, fm2sd_xx] = fm_eff*fm_eff*sd_eff*base_beta
+    fm_draws1 = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm2sd))
+    fm_draws2 = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm2sd))
+    sd_draws = r.normal(loc = sd_eff, scale = sd_eff_std, size = len(fm2sd))
+    beta[fm2sd_xx, fm2sd_yy] = fm_draws1*fm_draws2*sd_draws*base_beta
+    beta[fm2sd_yy, fm2sd_xx] = fm_draws1*fm_draws2*sd_draws*base_beta
 
     # 1 face mask + social distancing
     fm1 = list(itertools.product(fm, set(node_ids)-set(fm)))
     fm1sd = [(x,y) for (x,y) in fm1 if (x in sd) or (y in sd)]
     fm1sd_xx = [x for (x,y) in fm1sd]
     fm1sd_yy = [y for (x,y) in fm1sd]
-    beta[fm1sd_xx, fm1sd_yy] = fm_eff*sd_eff*base_beta
-    beta[fm1sd_yy, fm1sd_xx] = fm_eff*sd_eff*base_beta
+    fm_draws = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm1sd))
+    sd_draws = r.normal(loc = sd_eff, scale = sd_eff_std, size = len(fm1sd))
+    beta[fm1sd_xx, fm1sd_yy] = fm_draws*sd_draws*base_beta
+    beta[fm1sd_yy, fm1sd_xx] = fm_draws*sd_draws*base_beta
 
     # 0 face masks + social distancing
     fm0sd = list(itertools.product(set(sd)-set(fm), set(node_ids)-set(fm)))
     fm0sd_xx = [x for (x,y) in fm0sd]
     fm0sd_yy = [y for (x,y) in fm0sd]
-    beta[fm0sd_xx, fm0sd_yy] = sd_eff*base_beta
-    beta[fm0sd_yy, fm0sd_xx] = sd_eff*base_beta
+    sd_draws = r.normal(loc = sd_eff, scale = sd_eff_std, size = len(fm0sd))
+    beta[fm0sd_xx, fm0sd_yy] = sd_draws*base_beta
+    beta[fm0sd_yy, fm0sd_xx] = sd_draws*base_beta
 
     # 2 face masks, NO social distancing
     fm2nosd = [(x,y) for (x,y) in fm2 if (x not in sd) and (y not in sd)]
     fm2nosd_xx = [x for (x,y) in fm2nosd]
     fm2nosd_yy = [y for (x,y) in fm2nosd]
-    beta[fm2nosd_xx, fm2nosd_yy] = fm_eff*fm_eff*base_beta
-    beta[fm2nosd_yy, fm2nosd_xx] = fm_eff*fm_eff*base_beta
+    fm_draws1 = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm2nosd))
+    fm_draws2 = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm2nosd))
+    beta[fm2nosd_xx, fm2nosd_yy] = fm_draws1*fm_draws2*base_beta
+    beta[fm2nosd_yy, fm2nosd_xx] = fm_draws1*fm_draws2*base_beta
 
     # 1 face mask, NO social distancing
     fm1nosd = [(x,y) for (x,y) in fm1 if (x not in sd) and (y not in sd)]
     fm1nosd_xx = [x for (x,y) in fm1nosd]
     fm1nosd_yy = [y for (x,y) in fm1nosd]
-    beta[fm1nosd_xx, fm1nosd_yy] = fm_eff*base_beta
-    beta[fm1nosd_yy, fm1nosd_xx] = fm_eff*base_beta
+    fm_draws = r.normal(loc = fm_eff, scale = fm_eff_std, size = len(fm1nosd))
+    beta[fm1nosd_xx, fm1nosd_yy] = fm_draws*base_beta
+    beta[fm1nosd_yy, fm1nosd_xx] = fm_draws*base_beta
 
     # 0 face masks, NO social distancing
     fm0nosd = list(itertools.product(set(node_ids)-set(sd)-set(fm), set(node_ids)-set(sd)-set(fm)))

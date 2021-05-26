@@ -78,6 +78,9 @@ class TestFreq:
         self.quar_comp = quar_params['quar_comp'] # dictionary of node-specific compliance probabilities
         self.quar_len = quar_params['quar_len'] # number of time steps individuals are asked to quarantine
 
+        # Set up counter for community transmitted infections
+        self.ext_ict = 0
+
     def spread(self, adj_mat, s_nodes, e_nodes, ia_nodes, is_nodes, q_nodes, r):
         """
         Carries out the susceptible to infectious spreading process for 1 time step;
@@ -146,6 +149,7 @@ class TestFreq:
         for node in s_nodes:
             if r.uniform() <= self.ext_inf:
                 new_exposed.add(node)
+                self.ext_ict +=1
 
         # For each exposed node, transition to infectious (symp or asymp) probabilistically
         for node in e_nodes:
@@ -722,7 +726,8 @@ class TestFreq:
 
         # Divide up the nodes randomly into bins for scheduled testing
         r.shuffle(node_ids)
-        test_lists = [node_ids[i:i + int(np.ceil(len(node_ids)/self.test_freq))] for i in range(0, len(node_ids), int(np.ceil(len(node_ids)/self.test_freq)))]
+        if self.test_freq!=0:
+            test_lists = [node_ids[i:i + int(np.ceil(len(node_ids)/self.test_freq))] for i in range(0, len(node_ids), int(np.ceil(len(node_ids)/self.test_freq)))]
 
         # Loop through the time steps
         for tstep in range(self.adj_mats.shape[0]):
@@ -735,8 +740,11 @@ class TestFreq:
             test_pos_symp_byt.append(test_pos_symp)
 
             # Perform scheduled testing before propagating the disease
-            test_pos_schd, test_neg_schd, test_nc_schd = self.scheduled_test(test_lists[tstep % self.test_freq], e_nodes_byt, ia_nodes_byt, is_nodes_byt, r)
-            test_pos_schd_byt.append(test_pos_schd)
+            if self.test_freq!=0:
+                test_pos_schd, test_neg_schd, test_nc_schd = self.scheduled_test(test_lists[tstep % self.test_freq], e_nodes_byt, ia_nodes_byt, is_nodes_byt, r)
+                test_pos_schd_byt.append(test_pos_schd)
+            else:
+                test_pos_schd_byt.append([])
 
             # Quarantine individuals who tested positive (with delay)
             # Quarantine symptomatic cases that tested positive
