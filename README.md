@@ -1,16 +1,38 @@
-# covid-campus
-
-Study of the effectiveness of SARS-CoV-2 repeat testing, social distancing, and mask wearing among a residential college population using the Copenhagen Networks Study data.
+# COVID Campus
 
 ## File Overview
+### Core Functions
+* [**testing_freq.py**](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/testing_freq.py): main class and methods for running simulations examining testing frequency
+* [**utils.py**](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/utils.py): helper functions for constructing weighted adjacency matrices, assigning non-pharmaceutical interventions (NPIs), and incorporating NPIs into dyadic transmission probabilities
+* [**plotfx.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/plotfx.py): some basic plotting functions to show metrics over time and by testing frequency
+* [**Simulation_Examples.ipynb**](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/Simulation_Examples.ipynb): example code showing how to run simulations
 
-* [**testing_freq.py**](https://github.com/onnela-lab/covid-campus/blob/main/testing_freq.py): main class and methods for running simulations examining testing frequency
-* [**utils.py**](https://github.com/onnela-lab/covid-campus/blob/main/utils.py): helper functions for constructing weighted adjacency matrices and other inputs to the TestFreq class
-* [**CNS_DataProcessing.ipynb**](https://github.com/onnela-lab/covid-campus/blob/main/CNS_DataProcessing.ipynb): code used to clean and explore Copenhagen Network Study data prior to running simulations
-* [**Simulation_Examples.ipynb**](https://github.com/onnela-lab/covid-campus/blob/main/Simulation_Examples.ipynb): example code showing how to run simulations
+### Data Processing & Visualization
+* [**CNS_DataProcessing.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/CNS_DataProcessing.ipynb): loads, cleans, and analyzes Copenhagen Network Study data; removes weak ties, empty scans, and non-participating devices
+* [**Network_Plots.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/Network_Plots.ipynb): creates network plots for Copenhagen Network Study data with connected components arranged in a grid for each day
+
+### Generate Results
+* [**beta003_noNPI_vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta003_noNPI_vax_hicom.py): runs simulations for R0 ~ 1.5 with high transmission from the community; no mask wearing or social distancing
+* [**beta006_noNPI_vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_noNPI_vax_hicom.py): runs simulations for R0 ~ 3.0 with high transmission from the community; no mask wearing or social distancing
+* [**beta009_noNPI_vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta009_noNPI_vax_hicom.py): runs simulations for R0 ~ 4.5 with high transmission from the community; no mask wearing or social distancing
+* [**beta003_noNPI_vax_locom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta003_noNPI_vax_locom.py): runs simulations for R0 ~ 1.5 with low transmission from the community; no mask wearing or social distancing
+* [**beta006_noNPI_vax_locom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_noNPI_vax_locom.py): runs simulations for R0 ~ 3.0 with low transmission from the community; no mask wearing or social distancing
+* [**beta009_noNPI_vax_locom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta009_noNPI_vax_locom.py): runs simulations for R0 ~ 4.5 with low transmission from the community; no mask wearing or social distancing
+* [**beta006_multiNPI_0vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_multiNPI_0vax_hicom.py): runs simulations for R0 ~ 3.0 with high transmission from the community; no baseline immunity; proportion of the population wearing masks and socially distancing
+* [**beta006_multiNPI_20vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_multiNPI_20vax_hicom.py): runs simulations for R0 ~ 3.0 with high transmission from the community; 20% baseline immunity; proportion of the population wearing masks and socially distancing
+* [**beta006_multiNPI_40vax_hicom.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_multiNPI_40vax_hicom.py): runs simulations for R0 ~ 3.0 with high transmission from the community; 40% baseline immunity; proportion of the population wearing masks and socially distancing
+* [**beta006_multiNPI_0vax_hicom_correlated.py**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/beta006_multiNPI_0vax_hicom_correlated.py): runs simulations for R0 ~ 3.0 with high transmission from the community; no baseline immunity; proportion of the population wearing masks and socially distancing; mask wearing clustered on the proximity network
+
+### Analyze & Visualize Results
+* [**Clean_noNPI_Cluster_Results.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/Clean_noNPI_Cluster_Results.ipynb): loads, combines, and restructures output from beta003_noNPI_vax_hicom.py, beta006_noNPI_vax_hicom.py, beta009_noNPI_vax_hicom.py, beta003_noNPI_vax_locom.py, beta006_noNPI_vax_locom.py, and beta009_noNPI_vax_locom.py scripts; results used in noNPI_Plots.ipynb
+* [**noNPI_Plots.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/noNPI_Plots.ipynb): creates plots showing infections, tests, and isolations over time for R0 ~ 1.5, R0 ~ 3.0, and R0 ~ 4.5 for both high and low community transmission settings; generates plots by percent with baseline immunity
+* [**NPI_Cluster_Results_hicom.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/NPI_Cluster_Results_hicom.ipynb): creates heatmaps comparing average cumulative incidence for various testing frequencies, proportion mask wearing, proportion social distancing under high community transmission scenario
+* [**NPI_Cluster_Results_locom.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/NPI_Cluster_Results_locom.ipynb): creates heatmaps comparing average cumulative incidence for various testing frequencies, proportion mask wearing, proportion social distancing under low community transmission scenario
+* [**NPI_Cluster_Results_Correlated.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/NPI_Cluster_Results_Correlated.ipynb): creates heatmaps comparing random assignment of mask wearing with clustered assignment of mask wearing; social distancing was randomly assigned in both scenarios
+* [**Relative_Effectiveness.ipynb**](https://github.com/hhambridge/COVID-Campus/blob/master/Code/Relative_Effectiveness.ipynb): analyzes relative effectiveness of various mitigation measures using linear regression model
 
 ## Usage
-Below is a basic example of how to use the files to run testing frequency simulations. For a full working example, see [Simulation_Examples.ipynb](https://github.com/onnela-lab/covid-campus/blob/main/Simulation_Examples.ipynb).
+Below is a basic example of how to use the files to run testing frequency simulations. For a full working example, see [Simulation_Examples.ipynb](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/Simulation_Examples.ipynb).
 
 1. Import the necessary packages/files.
 ```
@@ -19,7 +41,7 @@ import numpy as np
 from testing_freq import *
 from utils import *
 ```
-2. Read in the data. Here we use a cleaned version of the Copenhagen Networks Study data. `timestamp` is in seconds starting at 0, `user_a` and `user_b` are integer user IDs, and `rssi` is an integer received signal strength indicator. The cleaned data has been scrubbed of empty scans and non-participating users. For more information on how the cleaned file was generated, see [CNS_DataProcessing.ipynb](https://github.com/onnela-lab/covid-campus/blob/main/CNS_DataProcessing.ipynb).
+2. Read in the data. Here we use a cleaned version of the Copenhagen Networks Study data. `timestamp` is in seconds starting at 0, `user_a` and `user_b` are integer user IDs, and `rssi` is an integer received signal strength indicator. The cleaned data has been scrubbed of empty scans and non-participating users. For more information on how the cleaned file was generated, see [CNS_DataProcessing.ipynb](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/CNS_DataProcessing.ipynb).
 ```
 bt = pd.read_csv('bt_data_clean.csv', header = 0, names = ['timestamp','user_a', 'user_b', 'rssi'])
 ```
@@ -27,7 +49,7 @@ bt = pd.read_csv('bt_data_clean.csv', header = 0, names = ['timestamp','user_a',
 ```
 adj_mats, df = construct_adj_mat(bt, time_step = 86400, data_loops = 3, dist_thres = -75)
 ```
-4. Set up simulation parameters. See the [utils.py](https://github.com/onnela-lab/covid-campus/blob/main/utils.py) file for additional options.
+4. Set up simulation parameters. See the [utils.py](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/utils.py) file for additional options.
 ```
 disease_params = dict()
 disease_params['ext_inf'] = 0.002
