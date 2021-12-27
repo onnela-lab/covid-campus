@@ -11,7 +11,7 @@ Testing Frequencies: every 3, 7, 14, 28 days and symptomatic only
 Proportion Vaccinated: 0%, 20%, 40%, 60%, 80%
 Probability of External Infection: iid normal(loc = 0.0005, scale = 0.0001),
     roughly 0.3 people infected by outside source each day in a fully susceptible population,
-    corresponds to high community transmission scenario in paper
+    corresponds to low community transmission scenario in paper
 Proportion Mask Wearing: 0%
 Proportion Social Distancing: 0%
 -------------------
