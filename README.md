@@ -1,5 +1,11 @@
 # COVID Campus
 
+This code simulates the spread of COVID-19, as well as the effect of various mitigation measures, on an empirical contact network of college students collected through the Copenhagen Network Study. This work was published in the _International Journal of Infectious Diseases_. See https://doi.org/10.1016/j.ijid.2021.10.008 for more information.
+
+**Cite the Paper:** Hambridge HL, Kahn R, & Onnela JP (2021). Examining SARS-CoV-2 Interventions in Residential Colleges Using an Empirical Network. _International Journal of Infectious Diseases, 113,_ 325-330.
+
+**Cite the Code:** [![DOI](https://zenodo.org/badge/338376059.svg)](https://zenodo.org/badge/latestdoi/338376059)
+
 ## File Overview
 ### Core Functions
 * [**testing_freq.py**](https://github.com/hhambridge/Testing-Frequency/blob/master/Code/testing_freq.py): main class and methods for running simulations examining testing frequency
